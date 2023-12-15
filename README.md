@@ -7,9 +7,9 @@ The workflow aligns reads to a genome reference using STAR. Salmon is used to ob
 
 ### Where are the files?
 
-####Output directory structure
+#### Output directory structure
 The output files are under the processed tree in the morphic-bio-processing S3 bucket
-```js
+```bash
 morphic-bio-processing
 └── processed
     └── morphic-jax
@@ -20,10 +20,10 @@ morphic-bio-processing
             ├── downloads
             └── trimmed
 ```
-####Counts subdirectory
+#### Counts subdirectory
 The counts are the output from the Salmon and documentation can be found [here](https://gensoft.pasteur.fr/docs/salmon/1.1.0/file_formats.html)
 The key files are quant.genes.sf and quant.sf which contain the counts for genes and transcripts
-```js
+```bash
 Counts
 ├── CE_E06__Hypoxia_GT23-11306_ATGTAAGT-CATAGAGT_S38_L001_R1_001_val
 │   ├── aux_info
@@ -41,9 +41,9 @@ Counts
 │   ├── quant.genes.sf
 │   └── quant.sf
 ```
-####Tables subdirectory
+#### Tables subdirectory
 The Tables directory contains the aggregated counts for all the samples in the submission. The tables have rounded integer values (Counts), numeric values (RawCounts) and normalized TPM values obtained from Salmon. The stats.csv table has the alignment stats and the featureCounts has the STAR unaligned featureCounts.
-```js
+```bash
 Tables
 ├── featureCounts.csv
 ├── genesCounts.csv
@@ -54,9 +54,9 @@ Tables
 ├── txRawCounts.csv
 └── txTPM.csv
 ```
-####Aligned files subdirectory
+#### Aligned files subdirectory
 These are files produced by STAR. The key files are Aligned.out.bam and Aligned.toTranscriptome.out.bam which have the alignments in genomic and transcriptomic coordinates respectively. Details on the output can be found in STAR documentation [here](https://raw.githubusercontent.com/alexdobin/STAR/master/doc/STARmanual.pdf)
-```js
+```bash
 ├── CE_E06__Hypoxia_GT23-11306_ATGTAAGT-CATAGAGT_S38_L001_R1_001_val
 │   ├── Aligned.out.bam
 │   ├── Aligned.toTranscriptome.out.bam
@@ -73,18 +73,18 @@ These are files produced by STAR. The key files are Aligned.out.bam and Aligned.
 │       └── SJ.out.tab
 
 ```
-####downloads subdirectory
+#### downloads subdirectory
 These contain the downloaded files used to generate the indices and annotations. These are included for completeness and will not be part of the output in future datasets.
-```js
+```bash
 downloads
 ├── Homo_sapiens.GRCh38.dna.primary_assembly.fa
 ├── Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz.log
 ├── gencode.v44.primary_assembly.annotation.gtf
 └── gencode.v44.primary_assembly.annotation.gtf.gz.log
 ```
-####trimmed subdirectory
+#### trimmed subdirectory
 Contains output from Trimgalore, including fastqc reports.
-```js
+```bash
 trimmed
 ├── CE_E06__Hypoxia_GT23-11306_ATGTAAGT-CATAGAGT_S38_L001_R1_001.fastq.gz_trimming_report.txt
 ├── CE_E06__Hypoxia_GT23-11306_ATGTAAGT-CATAGAGT_S38_L001_R1_001_val_1_fastqc.html
