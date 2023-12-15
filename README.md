@@ -1,4 +1,4 @@
-#Analytical workflow for Bulk RNA-seq
+# Analytical workflow for Bulk RNA-seq
 
 ![Screenshot of workflow](screenshots/star-salmon.png "Star-salmon workflow")
 ## Description of workflow
