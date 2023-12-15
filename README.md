@@ -100,7 +100,7 @@ You need to have Docker installed on the cloud instance or local computer. For r
 
 1. Start the Bwb server. Make sure that you start up Bwb where your .aws directory is available as a subdirectory.
 ```bash
-docker run --rm -it -p 5900:5900  -p 6080:6080 -v ${PWD}:/data -v /srv/lhhung:/server -v /var/run/docker.sock:/var/run/docker.sock -v /tmp/.X11-unix:/tmp/.X11-unix  --privileged --group-add root biodepot/bwb:latest
+docker run --rm -it -p 5900:5900  -p 6080:6080 -v ${PWD}:/data -v /var/run/docker.sock:/var/run/docker.sock -v /tmp/.X11-unix:/tmp/.X11-unix  --privileged --group-add root biodepot/bwb:latest
 ```
 2. Connect to the Bwb server using a VNC client like RealVNC on port 5900 or your browser on port 6080. If you are running on a VM or instance use the VM/instance IP. On your laptop use localhost as your IP (unless running a VM). So to connect with a browser type localhost:6080 in your browser search bar.
 
