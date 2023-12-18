@@ -8,7 +8,7 @@ ARG samVersion
 ARG gffreadVersion
 ARG GCLIBversion
 
-RUN apt-get update && apt-get -y install build-essential curl bzip2 zlib1g-dev 	libncurses-dev libbz2-dev liblzma-dev  libcurl4-openssl-dev
+RUN apt-get update && apt-get -y install build-essential curl bzip2 zlib1g-dev 	libncurses-dev libbz2-dev liblzma-dev  libcurl4-openssl-dev librtmp-dev
 RUN curl -L https://github.com/samtools/samtools/releases/download/$samVersion/samtools-$samVersion.tar.bz2  | tar -jvxf - 
 RUN curl -L https://github.com/gpertea/gffread/archive/refs/tags/v$gffreadVersion.tar.gz  | tar -zvxf - 
 RUN curl -L https://github.com/gpertea/gclib/archive/refs/tags/v$GCLIBversion.tar.gz | tar -zvxf -
@@ -35,6 +35,7 @@ COPY --from=builder ${SOURCEPATH}/libnghttp* ${SOURCEPATH}/
 COPY --from=builder ${SOURCEPATH}/libssh* ${SOURCEPATH}/
 COPY --from=builder ${SOURCEPATH}/libps* ${SOURCEPATH}/
 COPY --from=builder ${SOURCEPATH}/libssl* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/librtmp* ${SOURCEPATH}/
 COPY --from=builder ${SOURCEPATH}/libcrypto* ${SOURCEPATH}/
 COPY --from=builder ${SOURCEPATH}/libgssapi* ${SOURCEPATH}/
 COPY --from=builder ${SOURCEPATH}/libldap* ${SOURCEPATH}/
@@ -51,6 +52,7 @@ COPY --from=builder ${SOURCEPATH}/libnghttp* ${SOURCEPATH}/
 COPY --from=builder ${SOURCEPATH}/libssh* ${SOURCEPATH}/
 COPY --from=builder ${SOURCEPATH}/libps* ${SOURCEPATH}/
 COPY --from=builder ${SOURCEPATH}/libssl* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/librtmp* ${SOURCEPATH}/
 COPY --from=builder ${SOURCEPATH}/libcrypto* ${SOURCEPATH}/
 COPY --from=builder ${SOURCEPATH}/libgssapi* ${SOURCEPATH}/
 COPY --from=builder ${SOURCEPATH}/libldap* ${SOURCEPATH}/
