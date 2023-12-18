@@ -18,7 +18,7 @@ class OWS3_download(OWBwBWidget):
     icon = getIconName(__file__,"downloadS3.png")
     want_main_area = False
     docker_image_name = "biodepot/s3transfer"
-    docker_image_tag = "latest__amd64"
+    docker_image_tag = "latest"
     inputs = [("Trigger",str,"handleInputsTrigger"),("awsdir",str,"handleInputsawsdir"),("bucket",str,"handleInputsbucket"),("downloadDir",str,"handleInputsdownloadDir"),("dirs",str,"handleInputsdirs")]
     outputs = [("downloadDir",str)]
     pset=functools.partial(settings.Setting,schema_only=True)
