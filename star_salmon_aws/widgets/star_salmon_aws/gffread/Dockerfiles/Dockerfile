@@ -3,6 +3,7 @@ ARG gffreadVersion=0.12.7
 ARG GCLIBversion=0.12.7
 FROM debian:bookworm-slim as builder
 ARG DEBIAN_FRONTEND=noninteractive
+ARG TARGETPLATFORM
 ARG samVersion
 ARG gffreadVersion
 ARG GCLIBversion
@@ -16,26 +17,47 @@ WORKDIR samtools-$samVersion
 RUN make -j 8
 WORKDIR /gffread-$gffreadVersion
 RUN make -j 8
+#Make the amd and arm64 directories so that they always exist for the next stage
+RUN mkdir -p /lib/x86_64-linux-gnu
+RUN mkdir -p /lib/aarch64-linux-gnu
+
 
 FROM debian:bookworm-slim
 ARG samVersion
 ARG gffreadVersion
+ARG TARGETPLATFORM
 COPY --from=builder /samtools-$samVersion/samtools /usr/local/bin/samtools
 COPY --from=builder /samtools-$samVersion/misc/ /usr/local/bin/
-COPY --from=builder /lib/x86_64-linux-gnu/libcurl.so* /lib/x86_64-linux-gnu/
-COPY --from=builder /lib/x86_64-linux-gnu/libncurses* /lib/x86_64-linux-gnu/
-COPY --from=builder /lib/x86_64-linux-gnu/libnghttp2.so.14 /lib/x86_64-linux-gnu/
-COPY --from=builder /lib/x86_64-linux-gnu/librtmp.so.1 /lib/x86_64-linux-gnu/
-COPY --from=builder /lib/x86_64-linux-gnu/libssh* /lib/x86_64-linux-gnu/
-COPY --from=builder /lib/x86_64-linux-gnu/libps* /lib/x86_64-linux-gnu/
-COPY --from=builder /lib/x86_64-linux-gnu/libssl* /lib/x86_64-linux-gnu/
-COPY --from=builder /lib/x86_64-linux-gnu/libcrypto* /lib/x86_64-linux-gnu/
-COPY --from=builder /lib/x86_64-linux-gnu/libgssapi* /lib/x86_64-linux-gnu/
-COPY --from=builder /lib/x86_64-linux-gnu/libldap* /lib/x86_64-linux-gnu/
-COPY --from=builder /lib/x86_64-linux-gnu/liblber* /lib/x86_64-linux-gnu/
-COPY --from=builder /lib/x86_64-linux-gnu/libbrotl* /lib/x86_64-linux-gnu/
-COPY --from=builder /lib/x86_64-linux-gnu/libkrb5* /lib/x86_64-linux-gnu/
-COPY --from=builder /lib/x86_64-linux-gnu/libk5crypto* /lib/x86_64-linux-gnu/
-COPY --from=builder /lib/x86_64-linux-gnu/libsas* /lib/x86_64-linux-gnu/
-COPY --from=builder /lib/x86_64-linux-gnu/libkeyutils* /lib/x86_64-linux-gnu/
+ENV SOURCEPATH="/lib/x86_64-linux-gnu"
+COPY --from=builder ${SOURCEPATH}/libcurl.so* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/libncurses* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/libnghttp* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/libssh* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/libps* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/libssl* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/libcrypto* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/libgssapi* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/libldap* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/liblber* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/libbrotl* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/libkrb5* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/libk5crypto* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/libsas* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/libkeyutils* ${SOURCEPATH}/
+ENV SOURCEPATH="/lib/aarch64-linux-gnu"
+COPY --from=builder ${SOURCEPATH}/libcurl.so* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/libncurses* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/libnghttp* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/libssh* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/libps* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/libssl* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/libcrypto* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/libgssapi* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/libldap* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/liblber* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/libbrotl* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/libkrb5* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/libk5crypto* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/libsas* ${SOURCEPATH}/
+COPY --from=builder ${SOURCEPATH}/libkeyutils* ${SOURCEPATH}/
 COPY --from=builder /gffread-$gffreadVersion/gffread /usr/local/bin/gffread
