@@ -33,8 +33,8 @@ For example for paired end fastq files stored in:
 morphic-bio-processing
 └── morphic-jax
     └── JAX_RNAseq_ExtraEmbryonic
-        ├── CE_E06__Hypoxia_GT23-11306_ATGTAAGT-CATAGAGT_S38_L001_R1_001.filtered.fastq.gz
-        └── CE_E06__Hypoxia_GT23-11306_ATGTAAGT-CATAGAGT_S38_L001_R2_001.filtered.fastq.gz
+        ├── CE_E06__Hypoxia_GT23-11306_ATGTAAGT-CATAGAGT_S38_L001_R1_001.fastq.gz
+        └── CE_E06__Hypoxia_GT23-11306_ATGTAAGT-CATAGAGT_S38_L001_R2_001.fastq.gz
 
 ```
 The filtered results woudl be stored here:
