@@ -7,55 +7,29 @@ The workflow aligns reads to a genome reference using STAR. Salmon is used to ob
 
 ## Where are the files?
 ### Output directory structure
-The output files are under the processed tree in the morphic-bio-processing S3 bucket
-```bash
-morphic-bio-processing
-└── processed
-    ├── filtered
-    │   └── morphic-jax
-    │       └── JAX_RNAseq_ExtraEmbryonic
-    └── morphic-jax
-        └── JAX_RNAseq_ExtraEmbryonic
-            ├── Counts
-            ├── Tables
-            ├── alignedfiles
-            ├── downloads
-            └── trimmed
-
-```
-### Y chromosome filtered files
-These are files that have had the Y chromosome mapping reads removed. This is done by making a list of reads that STAR maps to the Y chromosome and then removing these from the bamfiles and the fastq files. The files are organized mirroring the same directory structure for the original sample fastq files. 
-
-For example for paired end fastq files stored in:
-
-#### Original path to fastq files
+The unfiltered output files are organized under the processed tree in the morphic-bio-processing S3 bucket. 
 ```bash
 morphic-bio-processing
 └── morphic-jax
     └── JAX_RNAseq_ExtraEmbryonic
-        ├── CE_E06__Hypoxia_GT23-11306_ATGTAAGT-CATAGAGT_S38_L001_R1_001.fastq.gz
-        └── CE_E06__Hypoxia_GT23-11306_ATGTAAGT-CATAGAGT_S38_L001_R2_001.fastq.gz
+        └── JAX_RNAseq_ExtraEmbryonic 
+            └── filtered
+            └── processed 
+            └── source 
 
 ```
-The filtered results woudl be stored here:
-#### Filtered files
-```bash
-morphic-bio-processing
+### Processed data organization
+The processed data is organized under the "processed" directory organized by sample name and then the results type.
+```bash                                            
 └── processed
-    └── filtered
-        └── morphic-jax
-            └── JAX_RNAseq_ExtraEmbryonic
-                ├── CE_E06__Hypoxia_GT23-11306_ATGTAAGT-CATAGAGT_S38_L001_R1_001_val
-                │   ├── Aligned.out.bam
-                │   ├── Aligned.toTranscriptome.out.bam
-                │   ├── CE_E06__Hypoxia_GT23-11306_ATGTAAGT-CATAGAGT_S38_L001_R1_001.filtered.fastq.gz
-                │   └── CE_E06__Hypoxia_GT23-11306_ATGTAAGT-CATAGAGT_S38_L001_R2_001.filtered.fastq.gz
+    └──CE_E06__Hypoxia_GT23-11306_ATGTAAGT-CATAGAGT_S38_L001_R1_001_val
+        ├── Counts
+        ├── Tables
+        ├── alignedfiles
+        ├── downloads
+        └── trimmed
+
 ```
-The Aligned.out.bam is the STAR alignment in genome coords and Aligned.toTranscriptome.out.bam is the same in transcriptome coords. All bam and fastq files have had the same reads removed that STAR mapped to the Y chromosome. Details on the bamfiles output can be found in STAR documentation [here](https://raw.githubusercontent.com/alexdobin/STAR/master/doc/STARmanual.pdf)
-
-### Raw results
-Files that are not in the "filtered" object tree are results that do not have Y chromosome data removed.
-
 #### Counts subdirectory
 The counts are the output from the Salmon and documentation can be found [here](https://gensoft.pasteur.fr/docs/salmon/1.1.0/file_formats.html)
 The key files are quant.genes.sf and quant.sf which contain the counts for genes and transcripts
@@ -90,9 +64,10 @@ Tables
 ├── txRawCounts.csv
 └── txTPM.csv
 ```
-#### Aligned files subdirectory
+#### aligned files subdirectory
 These are files produced by STAR. The key files are Aligned.out.bam and Aligned.toTranscriptome.out.bam which have the alignments in genomic and transcriptomic coordinates respectively. Details on the output can be found in STAR documentation [here](https://raw.githubusercontent.com/alexdobin/STAR/master/doc/STARmanual.pdf)
 ```bash
+Aligned
 ├── CE_E06__Hypoxia_GT23-11306_ATGTAAGT-CATAGAGT_S38_L001_R1_001_val
 │   ├── Aligned.out.bam
 │   ├── Aligned.toTranscriptome.out.bam
@@ -130,6 +105,18 @@ trimmed
 ├── CE_E06__Hypoxia_GT23-11306_ATGTAAGT-CATAGAGT_S38_L001_R2_001_val_2_fastqc.zip
 
 ```
+### Filtered results
+We have also removed all reads in the bam and fastq files that align to the Y-cheomosome These are orgnaized under the filtered subdirectory.
+```bash
+└── filtered
+    ├── CE_E06__Hypoxia_GT23-11306_ATGTAAGT-CATAGAGT_S38_L001_R1_001_val
+    │   ├── Aligned.out.bam
+    │   ├── Aligned.toTranscriptome.out.bam
+    │   ├── CE_E06__Hypoxia_GT23-11306_ATGTAAGT-CATAGAGT_S38_L001_R1_001.filtered.fastq.gz
+    │   └── CE_E06__Hypoxia_GT23-11306_ATGTAAGT-CATAGAGT_S38_L001_R2_001.filtered.fastq.gz
+```
+The Aligned.out.bam is the STAR alignment in genome coords and Aligned.toTranscriptome.out.bam is the same in transcriptome coords. All bam and fastq files have had the same reads removed that STAR mapped to the Y chromosome. Details on the bamfiles output can be found in STAR documentation [here](https://raw.githubusercontent.com/alexdobin/STAR/master/doc/STARmanual.pdf)
+
 
 ### How do I run the workflow
 You need to have Docker installed on the cloud instance or local computer. For remote deployments you need to forward ports 5900 for vnc access or 6080 for browser access. 
