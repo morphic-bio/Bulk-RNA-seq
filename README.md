@@ -12,10 +12,9 @@ The unfiltered output files are organized under the processed tree in the morphi
 morphic-bio-processing
 └── morphic-jax
     └── JAX_RNAseq_ExtraEmbryonic
-        └── JAX_RNAseq_ExtraEmbryonic 
-            └── filtered
-            └── processed 
-            └── source 
+        └── filtered
+        └── processed 
+        └── source 
 
 ```
 ### Processed data organization
