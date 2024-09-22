@@ -83,9 +83,11 @@ downloads
 └── gencode.v44.primary_assembly.annotation.gtf.gz.log
 ```
 #### trimmed subdirectory
-Contains output from Trimgalore, including fastqc reports.
+Contains output from Trimgalore, including fastqc reports. Also includes a multqc summary of all the files 
 ```bash
 trimmed
+├──multiqc_data
+├──multiqc_report.html
 ├── CE_E06__Hypoxia_GT23-11306_ATGTAAGT-CATAGAGT_S38_L001_R1_001.fastq.gz_trimming_report.txt
 ├── CE_E06__Hypoxia_GT23-11306_ATGTAAGT-CATAGAGT_S38_L001_R1_001_val_1_fastqc.html
 ├── CE_E06__Hypoxia_GT23-11306_ATGTAAGT-CATAGAGT_S38_L001_R1_001_val_1_fastqc.zip
