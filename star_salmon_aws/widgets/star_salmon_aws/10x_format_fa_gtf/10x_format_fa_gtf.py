@@ -18,7 +18,7 @@ class OW10x_format_fa_gtf(OWBwBWidget):
     icon = getIconName(__file__,"perl.png")
     want_main_area = False
     docker_image_name = "biodepot/format-fa-gtf-10x"
-    docker_image_tag = "latest"
+    docker_image_tag = "e59dda73__46262d38__80368c82"
     inputs = [("inputgtf",str,"handleInputsinputgtf"),("inputfa",str,"handleInputsinputfa"),("trigger",str,"handleInputstrigger"),("outputgtf",str,"handleInputsoutputgtf"),("outputfa",str,"handleInputsoutputfa"),("skipFormat",str,"handleInputsskipFormat")]
     outputs = [("outputfa",str),("outputgtf",str)]
     pset=functools.partial(settings.Setting,schema_only=True)

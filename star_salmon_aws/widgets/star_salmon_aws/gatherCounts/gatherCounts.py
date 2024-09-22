@@ -18,7 +18,7 @@ class OWgatherCounts(OWBwBWidget):
     icon = getIconName(__file__,"startodeseq2.png")
     want_main_area = False
     docker_image_name = "biodepot/gathercounts"
-    docker_image_tag = "cbbd690a"
+    docker_image_tag = "cbbd690a__21b9851b__e5512470"
     inputs = [("countsDir",str,"handleInputscountsDir"),("alignsDir",str,"handleInputsalignsDir"),("tablesDir",str,"handleInputstablesDir"),("trigger",str,"handleInputstrigger")]
     outputs = [("tablesDir",str)]
     pset=functools.partial(settings.Setting,schema_only=True)

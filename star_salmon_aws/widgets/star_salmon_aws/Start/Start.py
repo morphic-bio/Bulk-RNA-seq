@@ -17,7 +17,7 @@ class OWStart(OWBwBWidget):
     priority = 10
     icon = getIconName(__file__,"start.png")
     want_main_area = False
-    docker_image_name = "biodepot/star-salmon-start"
+    docker_image_name = "biodepot/star-salmon-aws-start"
     docker_image_tag = "latest"
     outputs = [("work_dir",str),("genome_dir",str),("genome_file",str),("annotation_file",str),("genomegtfURLs",str),("bypass_star_index",str),("starversion",str),("transcriptomefile",str),("raw_genome_file",str),("raw_annotation_file",str),("download_dir",str),("trimmedfastqfiles",str),("trimmeddir",str),("fastqfiles",str),("s3bucket",str),("s3sourcedirectory",str),("s3downloaddir",str),("alignedfiles",str),("aligneddir",str),("s3destdirectory",str),("awscredentialsdir",str)]
     pset=functools.partial(settings.Setting,schema_only=True)

@@ -1,0 +1,3 @@
+FROM alpine:latest
+ARG TARGETPLATFORM
+RUN echo "${TARGETPLATFORM}"
