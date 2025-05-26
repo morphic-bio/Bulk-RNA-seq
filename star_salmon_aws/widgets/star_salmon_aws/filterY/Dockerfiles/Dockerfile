@@ -53,3 +53,4 @@ COPY --from=builder ${SOURCEPATH}/libk5crypto* ${SOURCEPATH}/
 COPY --from=builder ${SOURCEPATH}/libsas* ${SOURCEPATH}/
 COPY --from=builder ${SOURCEPATH}/libkeyutils* ${SOURCEPATH}/
 COPY filterChrY.sh /usr/local/bin/filterChrY.sh
+COPY filter_fastq.awk /usr/local/bin/filter_fastq.awk

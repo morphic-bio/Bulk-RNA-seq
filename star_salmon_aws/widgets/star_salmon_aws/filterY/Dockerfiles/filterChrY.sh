@@ -21,6 +21,7 @@ function filterSequence() {
     # Determine if input file is gzipped and set the appropriate command to read it
     local fileCmd
     local outputCmd
+    local outputCmdY
 
     # Get the directory of the first ynames.txt file
     local ynamesDir=$(dirname "${ynamesArray[0]}")
@@ -31,7 +32,11 @@ function filterSequence() {
     local namePart="${baseName%%.*}"
     local extension="${baseName#*.}"
     local outputFile="$ynamesDir/${namePart}.filtered.${extension}"
-    [[ -f "$outputFile" && -z "$overwrite" ]] &&  return 
+    # New file for Y chromosome reads
+    local outputFileY="$ynamesDir/${namePart}.chrY.${extension}"
+    
+    # Skip if files exist and overwrite is not set
+    [[ -f "$outputFile" && -f "$outputFileY" && -z "$overwrite" ]] && return 
     
     if [[ $1 == *.gz ]]; then
         fileCmd="zcat"
@@ -41,32 +46,12 @@ function filterSequence() {
         outputCmd="> \"$outputFile\""
     fi
 
-    # Build and execute the command
-    eval "$fileCmd \"$1\" | awk -v ynamesFile=\"${ynamesArray[0]}\" '
-    BEGIN {
-        # Load the ynames file into an associative array
-        while ((getline line < ynamesFile) > 0) {
-            ynames[line] = 1;
-        }
-    }
-    {
-        # Check if the first column is NOT in the ynames array
-        #ignore the '@'
-        firstColumn = substr(\$1, 2);
-        if (!(firstColumn in ynames)) {
-            # Print this line and the next three lines
-            print;
-            for (i = 0; i < 3; ++i) {
-                if (getline <= 0) break;
-                print;
-            }
-        } else {
-            # Skip the next three lines
-            for (i = 0; i < 3; ++i) {
-                if (getline <= 0) break;
-            }
-        }
-    }' $outputCmd"
+    # Get the directory of the script
+    local script_dir="$(dirname "$(readlink -f "$0")")"
+    local awk_script="${script_dir}/filter_fastq.awk"
+
+    # Build and execute the command to create both filtered files
+    eval "$fileCmd \"$1\" | awk -v ynamesFile=\"${ynamesArray[0]}\" -v outputFileY=\"$outputFileY\" -f \"$awk_script\" $outputCmd"
 }
 
 [ -z "$nThreads" ] && nThreads=1
@@ -87,7 +72,9 @@ for trimmedName in "${trimmedNames[@]}"; do
     txBamIn="$trimmedName/Aligned.toTranscriptome.out.bam"
     genesBamOut="$output/Aligned.out.bam"
     txBamOut="$output/Aligned.toTranscriptome.out.bam"
-    
+    genesBamOutY="$output/Aligned.out.chrY.bam"
+    txBamOutY="$output/Aligned.toTranscriptome.chrY.bam"
+
     mkdir -p "$output"
     #find readnames that align to Y chromosom    
     [[ ! -f "$ynames" || -n "$overwrite" ]] && \
@@ -95,12 +82,12 @@ for trimmedName in "${trimmedNames[@]}"; do
     eval "samtools view "$genesBamIn" | awk '\$3 == \"chrY\" { unique[\$1]++ } END { for (val in unique) print val }' > $ynames"
     #filter the genome alignments
     [[ ! -f "$genesBamOut" || -n "$overwrite" ]] && \
-    echo "samtools view -N $ynames -U $genesBamOut  -o /dev/null $genesBamIn" && \
-    eval "samtools view -N $ynames -U $genesBamOut  -o /dev/null $genesBamIn"
+    echo "samtools view -N $ynames -U $genesBamOut  -o $genesBamOutY $genesBamIn" && \
+    eval "samtools view -N $ynames -U $genesBamOut  -o $genesBamOutY $genesBamIn"
     #filter the transcript alignments
     [[ ! -f "$txBamOut" || -n "$overwrite" ]] && \
-    echo "samtools view -N $ynames -U $txBamOut  -o /dev/null  $txBamIn" && \
-    eval "samtools view -N $ynames -U $txBamOut  -o /dev/null  $txBamIn"
+    echo "samtools view -N $ynames -U $txBamOut  -o $txBamOutY $txBamIn" && \
+    eval "samtools view -N $ynames -U $txBamOut  -o $txBamOutY $txBamIn"
     ) &
     pidList+=($!)
     while (( ${#pidList[@]} >= nThreads )); do
@@ -112,7 +99,7 @@ for pid in "${pidList[@]}"; do
     wait "$pid"
 done
 [ -z "$sequenceDir" ] && exit 0
-
+echo "filtering sequences"
 for sequenceFile in "${sequenceFiles[@]}"; do
     ( echo "working on $sequenceFile"
     filterSequence $sequenceFile ) &    
